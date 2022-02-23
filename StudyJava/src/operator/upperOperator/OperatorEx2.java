@@ -1,4 +1,4 @@
-package operator;
+package operator.upperOperator;
 
 public class OperatorEx2 {
     public static void main(String[] args) {
