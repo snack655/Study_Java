@@ -22,7 +22,6 @@ public class SimpleCommander {
 			/* Prompt */
 			this.showPrompt();
 			
-			/* Command ��� */
 			try {
 				command = receiveCommand();
 			} catch (Exception e) {

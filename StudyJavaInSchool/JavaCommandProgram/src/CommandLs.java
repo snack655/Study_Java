@@ -1,4 +1,3 @@
-
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -43,7 +42,8 @@ public class CommandLs extends AbstractCommand {
 		if (file.isDirectory()) {
 			return "";
 		}
-		return String.valueOf(file.length());
+
+		return changeUnit(file.length());
 	}
 
 	// 파일명을 반환하는 함수
@@ -60,5 +60,35 @@ public class CommandLs extends AbstractCommand {
 	public Date convertToDate(long unixTime) {
 		return new Date(unixTime);
 	}
-	
+
+
+	/**
+	 * 파일 크기를 받아 K, M, G 단위를 붙이는 함수
+	 * 숫자는 3자리까지 나타냅니다.
+	 * @param fileSize
+	 * @return
+	 */
+	private String changeUnit(long fileSize) {
+		int unit = 0;
+		String result = "";
+		while(true) {
+			if (fileSize / 1000 < 1) {
+				if (unit == 0)
+					result = String.format("%d", fileSize);
+				else if (unit == 1)
+					result = String.format("%dK", fileSize);
+				else if (unit == 2)
+					result = String.format("%dM", fileSize);
+				else if (unit == 3)
+					result = String.format("%dG", fileSize);
+				else
+					result = String.format("%d", fileSize);
+
+				return result;
+			}
+
+			fileSize = fileSize / 1024;
+			unit++;
+		}
+	}
 }
