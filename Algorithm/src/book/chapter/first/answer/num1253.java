@@ -18,7 +18,7 @@ public class num1253 {
             A[i] = Integer.parseInt(st.nextToken());
         }
         Arrays.sort(A);
-        
+
         // 중요
         for (int k = 0; k < N; k++) {
             long find = A[k];
