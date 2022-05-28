@@ -5,11 +5,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.Socket;
 
-public class Input_Message extends Thread {
+public class InputThread extends Thread {
 	private Socket sc = null;
 
 	
-	public Input_Message(Socket sc) {
+	public InputThread(Socket sc) {
 		this.sc = sc;
 	}
 	

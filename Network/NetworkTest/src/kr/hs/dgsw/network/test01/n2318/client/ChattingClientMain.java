@@ -10,10 +10,10 @@ public class ChattingClientMain {
 		try {
 			Socket sc = new Socket("127.0.0.1",5000);
 			
-			Output_Message om = new Output_Message(sc);
+			OutputThread om = new OutputThread(sc);
 			om.start();
 			
-			Input_Message im = new Input_Message(sc);
+			InputThread im = new InputThread(sc);
 			im.start();
 		} catch(Exception e) {
 			System.out.println("연결 종료");
