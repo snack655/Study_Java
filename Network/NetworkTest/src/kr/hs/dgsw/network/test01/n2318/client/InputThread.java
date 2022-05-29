@@ -8,7 +8,6 @@ import java.net.Socket;
 public class InputThread extends Thread {
 	private Socket sc = null;
 
-	
 	public InputThread(Socket sc) {
 		this.sc = sc;
 	}
