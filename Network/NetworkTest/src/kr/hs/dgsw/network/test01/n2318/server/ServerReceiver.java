@@ -27,20 +27,15 @@ class ServerReceiver extends Thread {
 
     public void run() {
         try {
-            name = in.readUTF();
-            multiChatServer.sendToAll("#" + name + "님이 들어오셨습니다.");
-            multiChatServer.clients.put(name, out);
-            System.out.println("현재 서버접속자 수는 " + multiChatServer.clients.size() + "입니다.");
+            setServer();
             while(in != null) {
                 sortOutCommand();
             }
         } catch (IOException e) {
             // Ignore
         } finally {
-            multiChatServer.sendToAll("#" + name + "님이 나가셨습니다.");
-            multiChatServer.clients.remove(name);
-            System.out.println("["+socket.getInetAddress() + ":" + socket.getPort() + "]" + "에서 접속을 종료하였습니다.");
-            System.out.println("현재 서버접속자 수는 " + multiChatServer.clients.size() + "입니다.");
+            shutDownClient();
+            printServerSize();
         }   // try
     } // run
 
@@ -77,4 +72,31 @@ class ServerReceiver extends Thread {
         multiChatServer.auth(name, "fail");
         System.out.println(name + "님이 인증에 실패하셨습니다.");
     } // authReceive
+
+    /**
+     * 서버 초기 세팅 함수
+     * @throws IOException
+     */
+    private void setServer() throws IOException {
+        name = in.readUTF();
+        multiChatServer.sendToAll("#" + name + "님이 들어오셨습니다.");
+        multiChatServer.clients.put(name, out);
+        System.out.println("현재 서버접속자 수는 " + multiChatServer.clients.size() + "입니다.");
+    }
+
+    /**
+     * 서버 접속자 수를 출력하는 함수
+     */
+    private void printServerSize() {
+        System.out.println("현재 서버접속자 수는 " + multiChatServer.clients.size() + "입니다.");
+    }
+
+    /**
+     * 클라이언트의 종료에 대응하는 함수
+     */
+    private void shutDownClient() {
+        multiChatServer.sendToAll("#" + name + "님이 나가셨습니다.");
+        multiChatServer.clients.remove(name);
+        System.out.println("["+socket.getInetAddress() + ":" + socket.getPort() + "]" + "에서 접속을 종료하였습니다.");
+    }
 } // Receiver Thread
