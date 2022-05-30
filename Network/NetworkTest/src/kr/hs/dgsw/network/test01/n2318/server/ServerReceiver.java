@@ -4,11 +4,16 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Objects;
 
 class ServerReceiver extends Thread {
     Socket socket;
     DataInputStream in;
     DataOutputStream out;
+    String name = "";
+
+    public static final String ID = "admin";
+    public static final String PASSWORD = "1234";
 
     MultiChatServer multiChatServer = new MultiChatServer();
 
@@ -21,16 +26,13 @@ class ServerReceiver extends Thread {
     }
 
     public void run() {
-        String name = "";
-
         try {
             name = in.readUTF();
             multiChatServer.sendToAll("#" + name + "님이 들어오셨습니다.");
-
             multiChatServer.clients.put(name, out);
             System.out.println("현재 서버접속자 수는 " + multiChatServer.clients.size() + "입니다.");
             while(in != null) {
-                multiChatServer.sendToAll(in.readUTF());
+                sortOutCommand();
             }
         } catch (IOException e) {
             // Ignore
@@ -41,4 +43,38 @@ class ServerReceiver extends Thread {
             System.out.println("현재 서버접속자 수는 " + multiChatServer.clients.size() + "입니다.");
         }   // try
     } // run
+
+    /**
+     * 명령어를 구분하여 각각 올바른 함수를 실행시킵니다.
+     * @throws IOException
+     */
+    private void sortOutCommand() throws IOException {
+        String[] commandDiv = in.readUTF().split(MultiChatServer.STANDARD);
+        switch (commandDiv[0]) {
+            case "[AUTH]": {
+                authReceive(commandDiv[1], commandDiv[2]);
+                break;
+            }
+            default: {
+                multiChatServer.sendToAll(commandDiv[0]);
+                break;
+            }
+        }
+    } // sortOutCommand
+
+    /**
+     * Auth 인증을 처리하는 함수입니다.
+     * @param id
+     * @param pw
+     */
+    private void authReceive(String id, String pw) {
+        System.out.println("진입 AUTH");
+        if (Objects.equals(id, ID) && Objects.equals(pw, PASSWORD)) {
+            multiChatServer.auth(name, "success");
+            System.out.println(name + "님이 인증에 성공하셨습니다.");
+            return;
+        }
+        multiChatServer.auth(name, "fail");
+        System.out.println(name + "님이 인증에 실패하셨습니다.");
+    } // authReceive
 } // Receiver Thread

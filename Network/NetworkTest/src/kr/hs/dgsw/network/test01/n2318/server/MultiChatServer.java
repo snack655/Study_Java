@@ -10,6 +10,7 @@ import java.util.Iterator;
 
 public class MultiChatServer {
     HashMap clients;
+    public static String STANDARD = "::";
 
     MultiChatServer() {
         clients = new HashMap();
@@ -44,6 +45,13 @@ public class MultiChatServer {
                 out.writeUTF(msg);
             } catch (IOException e) { }
         }
+    }
+
+    void auth(String name, String result) {
+        DataOutputStream out = (DataOutputStream) clients.get(name);
+        try {
+            out.writeUTF("[AUTH]::"+result);
+        } catch (IOException e) { }
     }
 
     public static void main(String[] args) {
