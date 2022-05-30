@@ -26,6 +26,10 @@ class ClientReceiver extends Thread {
                         authReceive(command[1]);
                         break;
                     }
+                    case "[LIST]": {
+                        listReceive(command[1], command[2]);
+                        break;
+                    }
                     default: {
                         System.out.println(command[0]);
                         break;
@@ -43,5 +47,9 @@ class ClientReceiver extends Thread {
             MultiChatClient.isLOGIN = false;
         }
         MultiChatClient.isLOADING = false;
+    }
+
+    public void listReceive(String fileName, String fileSize) {
+        System.out.println("파일명 : " + fileName + "    사이즈 : " + fileSize);
     }
 } // ClientReceiver

@@ -51,7 +51,23 @@ public class MultiChatServer {
     void auth(String name, String result) {
         DataOutputStream out = (DataOutputStream) clients.get(name);
         try {
-            out.writeUTF("[AUTH]::"+result);
+            out.writeUTF("[AUTH]"+STANDARD+result);
+        } catch (IOException e) { }
+    }
+
+    void sendFileList(String name, String fileName, String fileSize, Boolean hasFile) {
+        DataOutputStream out = (DataOutputStream) clients.get(name);
+        try {
+            if (hasFile) {
+                out.writeUTF("[LIST]" +
+                        STANDARD +
+                        fileName +
+                        STANDARD +
+                        fileSize
+                );
+            } else {
+                out.writeUTF("0개의 파일..");
+            }
         } catch (IOException e) { }
     }
 

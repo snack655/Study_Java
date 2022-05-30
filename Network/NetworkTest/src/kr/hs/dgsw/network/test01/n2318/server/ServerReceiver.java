@@ -5,7 +5,8 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.Collections;
+import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -57,8 +58,8 @@ class ServerReceiver extends Thread {
                 break;
             }
             case "[LIST]": {
-                File[] fileArr = file.listFiles();
-
+                sendFileList();
+                break;
             }
             default: {
                 multiChatServer.sendToAll(commandDiv[0]);
@@ -73,7 +74,6 @@ class ServerReceiver extends Thread {
      * @param pw
      */
     private void authReceive(String id, String pw) {
-        System.out.println("진입 AUTH");
         if (Objects.equals(id, ID) && Objects.equals(pw, PASSWORD)) {
             multiChatServer.auth(name, "success");
             System.out.println(name + "님이 인증에 성공하셨습니다.");
@@ -82,6 +82,31 @@ class ServerReceiver extends Thread {
         multiChatServer.auth(name, "fail");
         System.out.println(name + "님이 인증에 실패하셨습니다.");
     } // authReceive
+
+    private void sendFileList() throws IOException {
+        File[] fileArr = file.listFiles();
+
+        // 숨긴 파일은 전송하지 않기 위해
+        List<File> processedFileList = new ArrayList<>();
+        for (int i = 0; i < fileArr.length; i++) {
+            char[] fileName = fileArr[i].getName().toCharArray();
+            if (fileName[0] == '.') {
+                continue;
+            }
+            processedFileList.add(fileArr[i]);
+        }
+
+        if (processedFileList.isEmpty()) {
+            System.out.println(processedFileList);
+            multiChatServer.sendFileList(name, null, null, false);
+            return;
+        }
+
+        for (File file: processedFileList) {
+            String fileSize = Files.size(file.toPath()) / 1024 + "KB";
+            multiChatServer.sendFileList(name, file.getName(), fileSize, true);
+        }
+    }
 
     /**
      * 서버 초기 세팅 함수
