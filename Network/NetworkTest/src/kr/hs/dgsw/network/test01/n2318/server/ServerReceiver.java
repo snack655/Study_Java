@@ -83,6 +83,11 @@ class ServerReceiver extends Thread {
         System.out.println(name + "님이 인증에 실패하셨습니다.");
     } // authReceive
 
+    /**
+     * 파일 리스트를 가공하여 메인으로 전송합니다.
+     * 이때 숨긴 파일은 전송하지 않습니다.
+     * @throws IOException
+     */
     private void sendFileList() throws IOException {
         File[] fileArr = file.listFiles();
 
