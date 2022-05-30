@@ -10,7 +10,8 @@ import java.util.Iterator;
 
 public class MultiChatServer {
     HashMap clients;
-    public static String STANDARD = "::";
+    public static final String fileFolder = "/Users/choiminjae/NetworkTestServer";
+    public static final String STANDARD = "::";
 
     MultiChatServer() {
         clients = new HashMap();

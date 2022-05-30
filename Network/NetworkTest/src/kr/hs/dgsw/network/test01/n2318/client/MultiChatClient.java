@@ -7,7 +7,7 @@ import java.util.Scanner;
 public class MultiChatClient {
     public static Boolean isLOGIN = false;
     public static Boolean isLOADING = false;
-    public static String STANDARD = "::";
+    public static final String STANDARD = "::";
 
     public static void main(String[] args) {
         String nickName;

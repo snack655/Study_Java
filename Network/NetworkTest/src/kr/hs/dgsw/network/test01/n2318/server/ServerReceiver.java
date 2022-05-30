@@ -2,14 +2,18 @@ package kr.hs.dgsw.network.test01.n2318.server;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 class ServerReceiver extends Thread {
     Socket socket;
     DataInputStream in;
     DataOutputStream out;
+    File file;
     String name = "";
 
     public static final String ID = "admin";
@@ -19,6 +23,8 @@ class ServerReceiver extends Thread {
 
     ServerReceiver(Socket socket) {
         this.socket = socket;
+        file = new File(MultiChatServer.fileFolder);
+
         try {
             in = new DataInputStream(socket.getInputStream());
             out = new DataOutputStream(socket.getOutputStream());
@@ -49,6 +55,10 @@ class ServerReceiver extends Thread {
             case "[AUTH]": {
                 authReceive(commandDiv[1], commandDiv[2]);
                 break;
+            }
+            case "[LIST]": {
+                File[] fileArr = file.listFiles();
+
             }
             default: {
                 multiChatServer.sendToAll(commandDiv[0]);

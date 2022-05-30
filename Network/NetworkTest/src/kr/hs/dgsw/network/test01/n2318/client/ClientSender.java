@@ -3,6 +3,7 @@ package kr.hs.dgsw.network.test01.n2318.client;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Locale;
 import java.util.Scanner;
 
 class ClientSender extends Thread {
@@ -33,6 +34,7 @@ class ClientSender extends Thread {
 
             System.out.println("FTP 서버에 연결되었습니다!");
             System.out.println("메시지 혹은 명령어를 입력해주세요.");
+            System.out.println("/help로 명령어 목록을 볼 수 있습니다.");
 
             while (out != null) {
                 String command = scanner.nextLine();
@@ -72,12 +74,12 @@ class ClientSender extends Thread {
     private void sortOutCommand(String command) throws IOException {
         String[] commandDiv = command.split(" ");
 
-        switch (commandDiv[0]) {
-            case "/파일목록": {
+        switch (commandDiv[0].toLowerCase(Locale.ROOT)) {
+            case "/filelist": {
                 out.writeUTF("[LIST]"+MultiChatClient.STANDARD);
                 break;
             }
-            case "/업로드": {
+            case "/upload": {
                 if (commandDiv.length >= 3) {
                     out.writeUTF("[UPLOAD_NAME]" +
                             MultiChatClient.STANDARD +
@@ -91,13 +93,13 @@ class ClientSender extends Thread {
                             commandDiv[1]
                     );
                 } else {
-                    System.out.println("[/업로드 파일 경로 (파일명)] 형식으로 입력해주세요");
+                    System.out.println("[/upload 파일경로 (파일명)] 형식으로 입력해주세요");
                 }
                 break;
             }
-            case "/다운로드": {
+            case "/download": {
                 if (commandDiv.length < 2) {
-                    System.out.println("[/다운로드 파일명] 형식으로 입력해주세요");
+                    System.out.println("[/download 파일명] 형식으로 입력해주세요");
                 } else {
                     out.writeUTF("[DOWNLOAD]" +
                             MultiChatClient.STANDARD +
@@ -106,9 +108,26 @@ class ClientSender extends Thread {
                 }
                 break;
             }
+            case "/help": {
+                printCommandList();
+                break;
+            }
             default: {
                 out.writeUTF("["+name+"] " + command);
             }
         } // switch
     } // sortOutCommand
+
+    /**
+     * 명령어 목록을 출력해주는 함수.
+     */
+    private void printCommandList() {
+        System.out.println("********** | 명령어 목록 | **********");
+        System.out.println("/help : 명령어 목록을 보여줍니다.");
+        System.out.println("/filelist : 파일의 목록을 보여줍니다.");
+        System.out.println("/upload 파일경로 : 서버에 지정한 경로의 파일을 업로드 합니다.");
+        System.out.println("/upload 파일경로 파일명 : 서버에 지정한 경로의 파일을 지정한 파일명으로 업로드 합니다.");
+        System.out.println("/download 파일명 : 서버의 파일 목록에 있는 파일을 다운받습니다.");
+        System.out.println("***********************************");
+    }
 } // ClientSender
