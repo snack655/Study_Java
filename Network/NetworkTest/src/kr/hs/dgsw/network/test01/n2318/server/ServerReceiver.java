@@ -1,9 +1,6 @@
 package kr.hs.dgsw.network.test01.n2318.server;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -14,6 +11,7 @@ class ServerReceiver extends Thread {
     Socket socket;
     DataInputStream in;
     DataOutputStream out;
+    FileOutputStream fileOut;
     File file;
     String name = "";
 
@@ -39,7 +37,7 @@ class ServerReceiver extends Thread {
                 sortOutCommand();
             }
         } catch (IOException e) {
-            // Ignore
+            e.printStackTrace();
         } finally {
             shutDownClient();
             printServerSize();
@@ -58,8 +56,16 @@ class ServerReceiver extends Thread {
                 break;
             }
             case "[LIST]": {
-                sendFileList();
+                receiveFileList();
                 break;
+            }
+            case "[UPLOAD]": {
+                fileReceive(commandDiv[1], commandDiv[2]);
+                multiChatServer.sendUploadResult(name);
+                break;
+            }
+            case "[UPLOAD_NAME]": {
+                fileNameReceive();
             }
             default: {
                 multiChatServer.sendToAll(commandDiv[0]);
@@ -88,7 +94,7 @@ class ServerReceiver extends Thread {
      * 이때 숨긴 파일은 전송하지 않습니다.
      * @throws IOException
      */
-    private void sendFileList() throws IOException {
+    private void receiveFileList() throws IOException {
         File[] fileArr = file.listFiles();
 
         // 숨긴 파일은 전송하지 않기 위해
@@ -111,6 +117,19 @@ class ServerReceiver extends Thread {
             String fileSize = Files.size(file.toPath()) / 1024 + "KB";
             multiChatServer.sendFileList(name, file.getName(), fileSize, true);
         }
+    }
+
+    private void fileReceive(String fileSize, String fileName) throws IOException {
+        fileOut = new FileOutputStream(MultiChatServer.fileFolder + "/" + fileName);
+        int readBit = 0;
+        for (long i = 0; i < Long.parseLong(fileSize); i++) {
+            readBit = in.read();
+            fileOut.write(readBit);
+        }
+    }
+
+    private void fileNameReceive() {
+
     }
 
     /**

@@ -30,6 +30,14 @@ class ClientReceiver extends Thread {
                         listReceive(command[1], command[2]);
                         break;
                     }
+                    case "[UPLOAD]": {
+                        uploadReceive(command[1]);
+                        break;
+                    }
+                    case "[UPLOAD_NAME]": {
+                        uploadNameReceive();
+                        break;
+                    }
                     default: {
                         System.out.println(command[0]);
                         break;
@@ -39,7 +47,7 @@ class ClientReceiver extends Thread {
         }
     } // run
 
-    public void authReceive(String authResult) {
+    private void authReceive(String authResult) {
         if (Objects.equals(authResult, "success")) {
             MultiChatClient.isLOGIN = true;
         } else {
@@ -49,7 +57,15 @@ class ClientReceiver extends Thread {
         MultiChatClient.isLOADING = false;
     }
 
-    public void listReceive(String fileName, String fileSize) {
+    private void uploadReceive(String msg) {
+        System.out.println(msg);
+    }
+
+    private void uploadNameReceive() {
+
+    }
+
+    private void listReceive(String fileName, String fileSize) {
         System.out.println("파일명 : " + fileName + "    사이즈 : " + fileSize);
     }
 } // ClientReceiver

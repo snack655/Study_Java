@@ -12,6 +12,7 @@ public class MultiChatServer {
     HashMap clients;
     public static final String fileFolder = "/Users/choiminjae/NetworkTestServer";
     public static final String STANDARD = "::";
+    DataOutputStream out;
 
     MultiChatServer() {
         clients = new HashMap();
@@ -42,21 +43,21 @@ public class MultiChatServer {
 
         while (it.hasNext()) {
             try {
-                DataOutputStream out = (DataOutputStream) clients.get(it.next());
+                out = (DataOutputStream) clients.get(it.next());
                 out.writeUTF(msg);
             } catch (IOException e) { }
         }
     }
 
     void auth(String name, String result) {
-        DataOutputStream out = (DataOutputStream) clients.get(name);
+        out = (DataOutputStream) clients.get(name);
         try {
             out.writeUTF("[AUTH]"+STANDARD+result);
         } catch (IOException e) { }
     }
 
     void sendFileList(String name, String fileName, String fileSize, Boolean hasFile) {
-        DataOutputStream out = (DataOutputStream) clients.get(name);
+        out = (DataOutputStream) clients.get(name);
         try {
             if (hasFile) {
                 out.writeUTF("[LIST]" +
@@ -69,6 +70,15 @@ public class MultiChatServer {
                 out.writeUTF("0개의 파일..");
             }
         } catch (IOException e) { }
+    }
+
+    void sendUploadResult(String name) {
+        out = (DataOutputStream) clients.get(name);
+        try {
+            out.writeUTF("파일 전송에 성공했습니다!");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {
