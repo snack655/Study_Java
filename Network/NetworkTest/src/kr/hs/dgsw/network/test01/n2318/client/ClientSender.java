@@ -14,6 +14,8 @@ class ClientSender extends Thread {
     String id;
     String pw;
     Scanner scanner;
+    FileInputStream fis;
+    File file;
 
     ClientSender(Socket socket, String name) {
         this.socket = socket;
@@ -84,9 +86,9 @@ class ClientSender extends Thread {
             }
             case "/upload": {
                 if (commandDiv.length >= 3) {
-                    sendFileWithName(commandDiv[1], commandDiv[2]);
+                    makeFileWithName(commandDiv[1], commandDiv[2]);
                 } else if (commandDiv.length == 2){
-                    sendFile(commandDiv[1]);
+                    makeFile(commandDiv[1]);
                 } else {
                     System.out.println("[/upload 파일경로 (파일명)] 형식으로 입력해주세요");
                 }
@@ -114,32 +116,50 @@ class ClientSender extends Thread {
     } // sortOutCommand
 
 
-    private void sendFile(String path) throws IOException {
-        FileInputStream fis = initFile(path);
+    private void makeFile(String path) throws IOException {
+        fis = initFile(path);
         if (fis == null)
             return;
-        File file = new File(path);
+        file = new File(path);
+        sendFileInfo(file.getName());
+        readFile(fis);
+    }
+
+    /**
+     * 지정한 이름으로 보낼 파일 가공하기
+     * @param path
+     * @param name
+     * @throws IOException
+     */
+    private void makeFileWithName(String path, String name) throws IOException {
+        fis = initFile(path);
+        if (fis == null)
+            return;
+        file = new File(path);
+
+        // 확장자가 없다면
+        String ext;
+        if (!name.contains(".")) {
+            String fileName = file.getName();
+            ext = fileName.substring(fileName.lastIndexOf(".") + 1);
+            name = name + "." + ext;
+        }
+        sendFileInfo(name);
+        readFile(fis);
+    }
+
+    /**
+     * 최종적인 파일 전송
+     * @throws IOException
+     */
+    private void sendFileInfo(String fileName) throws IOException {
         out.writeUTF("[UPLOAD]" +
                 MultiChatClient.STANDARD +
                 Files.size(file.toPath()) +
                 MultiChatClient.STANDARD +
-                file.getName()
+                fileName
         );
         readFile(fis);
-    }
-
-    private void sendFileWithName(String path, String name) throws IOException {
-        FileInputStream fis = initFile(path);
-        if (fis == null)
-            return;
-        out.writeUTF("[UPLOAD_NAME]" +
-                MultiChatClient.STANDARD +
-                path +
-                MultiChatClient.STANDARD +
-                name
-        );
-        readFile(fis);
-        out.writeUTF("[SEND_END]");
     }
 
 
@@ -158,7 +178,6 @@ class ClientSender extends Thread {
 
     /**
      * 받은 파일 경로를 통해서 FileInputStream 반환
-     *
      * @param filePath
      * @return
      */
