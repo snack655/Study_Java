@@ -72,13 +72,23 @@ public class MultiChatServer {
         } catch (IOException e) { }
     }
 
-    void sendUploadResult(String name) {
+    void sendFindDuplicateFileResult(String name, Boolean result) {
+        out = (DataOutputStream) clients.get(name);
+        System.out.println(name + "  " + result);
+        try {
+            if (result) {
+                out.writeUTF("[DUPLICATE]");
+            } else {
+                out.writeUTF("[SUCCESS]");
+            }
+        } catch (IOException e) { }
+    }
+
+    void sendFileUploadSuccess(String name) {
         out = (DataOutputStream) clients.get(name);
         try {
-            out.writeUTF("파일 전송에 성공했습니다!");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            out.writeUTF("파일 업로드에 성공하였습니다!");
+        } catch (IOException e) { }
     }
 
     public static void main(String[] args) {

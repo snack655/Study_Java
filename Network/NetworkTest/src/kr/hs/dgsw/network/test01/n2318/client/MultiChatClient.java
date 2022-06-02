@@ -5,8 +5,10 @@ import java.net.Socket;
 import java.util.Scanner;
 
 public class MultiChatClient {
-    public static Boolean isLOGIN = false;
-    public static Boolean isLOADING = false;
+    public static Boolean IS_LOGIN = false;
+    public static Boolean IS_LOADING = false;
+    public static Boolean IS_DUPLICATE_WAIT = true;
+    public static Boolean IS_DUPLICATE;
     public static final String STANDARD = "::";
 
     public static void main(String[] args) {

@@ -30,12 +30,12 @@ class ClientReceiver extends Thread {
                         listReceive(command[1], command[2]);
                         break;
                     }
-                    case "[UPLOAD]": {
-                        uploadReceive(command[1]);
+                    case "[DUPLICATE]": {
+                        findDuplicateFile();
                         break;
                     }
-                    case "[UPLOAD_NAME]": {
-                        uploadNameReceive();
+                    case "[SUCCESS]": {
+                        notDuplicateFile();
                         break;
                     }
                     default: {
@@ -49,20 +49,22 @@ class ClientReceiver extends Thread {
 
     private void authReceive(String authResult) {
         if (Objects.equals(authResult, "success")) {
-            MultiChatClient.isLOGIN = true;
+            MultiChatClient.IS_LOGIN = true;
         } else {
             System.out.println("인증에 실패하였습니다. 다시 입력해주세요!");
-            MultiChatClient.isLOGIN = false;
+            MultiChatClient.IS_LOGIN = false;
         }
-        MultiChatClient.isLOADING = false;
+        MultiChatClient.IS_LOADING = false;
     }
 
-    private void uploadReceive(String msg) {
-        System.out.println(msg);
+    private void findDuplicateFile() {
+        MultiChatClient.IS_DUPLICATE = true;
+        MultiChatClient.IS_DUPLICATE_WAIT = false;
     }
 
-    private void uploadNameReceive() {
-
+    private void notDuplicateFile() {
+        MultiChatClient.IS_DUPLICATE = false;
+        MultiChatClient.IS_DUPLICATE_WAIT = false;
     }
 
     private void listReceive(String fileName, String fileSize) {

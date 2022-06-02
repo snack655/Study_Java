@@ -50,7 +50,7 @@ class ClientSender extends Thread {
 
     private void sendAuth() throws IOException{
         while (true) {
-            if (MultiChatClient.isLOGIN)
+            if (MultiChatClient.IS_LOGIN)
                 break;
             System.out.print("ID : ");
             id = scanner.nextLine();
@@ -65,8 +65,8 @@ class ClientSender extends Thread {
             );
 
             // receiver와의 동시성 문제 해결
-            MultiChatClient.isLOADING = true;
-            while(MultiChatClient.isLOADING){}
+            MultiChatClient.IS_LOADING = true;
+            while(MultiChatClient.IS_LOADING){}
         }
     }
 
@@ -122,7 +122,6 @@ class ClientSender extends Thread {
             return;
         file = new File(path);
         sendFileInfo(file.getName());
-        readFile(fis);
     }
 
     /**
@@ -145,7 +144,6 @@ class ClientSender extends Thread {
             name = name + "." + ext;
         }
         sendFileInfo(name);
-        readFile(fis);
     }
 
     /**
@@ -159,7 +157,26 @@ class ClientSender extends Thread {
                 MultiChatClient.STANDARD +
                 fileName
         );
-        readFile(fis);
+
+        while(MultiChatClient.IS_DUPLICATE_WAIT) { }
+
+        if (MultiChatClient.IS_DUPLICATE) {
+            System.out.println("같은 이름의 파일이 있습니다.");
+            System.out.println("덮어쓰기 하실건가요? (Y: 덮어쓰기 / N: 취소)");
+
+            String answer = scanner.nextLine();
+
+            if (answer.toLowerCase(Locale.ROOT).equals("y")) {
+                readFile(fis, true);
+            } else {
+                readFile(fis, false);
+            }
+        } else {
+            readFile(fis, true);
+        }
+
+        MultiChatClient.IS_DUPLICATE_WAIT = true;
+        MultiChatClient.IS_DUPLICATE = null;
     }
 
 
@@ -192,13 +209,19 @@ class ClientSender extends Thread {
         return fileIn;
     }
 
-    private void readFile(FileInputStream fis) throws IOException {
-        byte[] bytes = new byte[1024];
-        int readBit = 0;
-        while((readBit = fis.read(bytes)) != -1) {
-            // bytes에 저장된 데이터 전송
-            out.write(bytes, 0, readBit);
+    private void readFile(FileInputStream fis, Boolean result) throws IOException {
+        if (result) {
+            out.writeUTF("[SEND_FILE]");
+            byte[] bytes = new byte[1024];
+            int readBit = 0;
+            while((readBit = fis.read(bytes)) != -1) {
+                // bytes에 저장된 데이터 전송
+                out.write(bytes, 0, readBit);
+            }
+        } else {
+            out.writeUTF("[CANCEL_SEND_FILE]");
         }
+
     }
     
 } // ClientSender

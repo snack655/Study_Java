@@ -13,6 +13,8 @@ class ServerReceiver extends Thread {
     DataOutputStream out;
     FileOutputStream fileOut;
     File file;
+    String fileName;
+    Long fileSize;
     String name = "";
 
     public static final String ID = "admin";
@@ -60,12 +62,17 @@ class ServerReceiver extends Thread {
                 break;
             }
             case "[UPLOAD]": {
-                fileReceive(commandDiv[1], commandDiv[2]);
-                multiChatServer.sendUploadResult(name);
+                findDuplicateFile(commandDiv[1], commandDiv[2]);
                 break;
             }
-            case "[UPLOAD_NAME]": {
-                fileNameReceive();
+            case "[SEND_FILE]": {
+                fileReceive();
+                break;
+            }
+            case "[CANCEL_SEND_FILE]": {
+                fileName = null;
+                fileSize = null;
+                break;
             }
             default: {
                 multiChatServer.sendToAll(commandDiv[0]);
@@ -119,17 +126,35 @@ class ServerReceiver extends Thread {
         }
     }
 
-    private void fileReceive(String fileSize, String fileName) throws IOException {
+    private void findDuplicateFile(String size, String fileName) {
+        this.fileName = fileName;
+        fileSize = Long.parseLong(size);
+
+        File[] files = file.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                System.out.println(file.getName() + "  " + fileName);
+                if (file.getName().equals(fileName)) {
+                    System.out.println("진입");
+                    multiChatServer.sendFindDuplicateFileResult(name, true);
+                    return;
+                }
+            }
+        }
+        multiChatServer.sendFindDuplicateFileResult(name, false);
+    }
+
+    /**
+     * 받은 파일을 읽어 저정하는 함수
+     */
+    private void fileReceive() throws IOException {
         fileOut = new FileOutputStream(MultiChatServer.fileFolder + "/" + fileName);
         int readBit = 0;
-        for (long i = 0; i < Long.parseLong(fileSize); i++) {
+        for (long i = 0; i < fileSize; i++) {
             readBit = in.read();
             fileOut.write(readBit);
         }
-    }
-
-    private void fileNameReceive() {
-
+        multiChatServer.sendFileUploadSuccess(name);
     }
 
     /**
