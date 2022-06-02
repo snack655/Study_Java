@@ -98,10 +98,7 @@ class ClientSender extends Thread {
                 if (commandDiv.length < 2) {
                     System.out.println("[/download 파일명] 형식으로 입력해주세요");
                 } else {
-                    out.writeUTF("[DOWNLOAD]" +
-                            MultiChatClient.STANDARD +
-                            commandDiv[1]
-                    );
+                    downloadFile(commandDiv[1]);
                 }
                 break;
             }
@@ -114,6 +111,29 @@ class ClientSender extends Thread {
             }
         } // switch
     } // sortOutCommand
+
+    /**
+     * 파일 다운로드 요청
+     * @param fileName
+     * @throws IOException
+     */
+    private void downloadFile(String fileName) throws IOException {
+        out.writeUTF("[DOWNLOAD]" +
+                MultiChatClient.STANDARD +
+                fileName
+        );
+        while (true) {
+            if (MultiChatClient.IS_SUCCESS_FILE_DOWNLOAD != null)
+                break;
+            System.out.print("");
+        }
+        if (MultiChatClient.IS_SUCCESS_FILE_DOWNLOAD) {
+            System.out.println("파일 다운로드가 완료되었습니다.");
+        } else {
+            System.out.println("파일 다운로드에 실패했습니다.");
+        }
+        MultiChatClient.IS_SUCCESS_FILE_DOWNLOAD = null;
+    }
 
 
     private void makeFile(String path) throws IOException {

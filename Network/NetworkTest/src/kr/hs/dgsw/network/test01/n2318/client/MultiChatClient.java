@@ -1,5 +1,7 @@
 package kr.hs.dgsw.network.test01.n2318.client;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
+
 import java.net.ConnectException;
 import java.net.Socket;
 import java.util.Scanner;
@@ -9,6 +11,8 @@ public class MultiChatClient {
     public static Boolean IS_LOADING = false;
     public static Boolean IS_DUPLICATE_WAIT = true;
     public static Boolean IS_DUPLICATE;
+    public static Boolean IS_SUCCESS_FILE_DOWNLOAD;
+    public static final String CLIENT_FOLDER_PATH = "/Users/choiminjae/NetworkTestClient";
     public static final String STANDARD = "::";
 
     public static void main(String[] args) {

@@ -1,9 +1,12 @@
 package kr.hs.dgsw.network.test01.n2318.server;
 
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.file.Files;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -74,7 +77,6 @@ public class MultiChatServer {
 
     void sendFindDuplicateFileResult(String name, Boolean result) {
         out = (DataOutputStream) clients.get(name);
-        System.out.println(name + "  " + result);
         try {
             if (result) {
                 out.writeUTF("[DUPLICATE]");
@@ -82,6 +84,28 @@ public class MultiChatServer {
                 out.writeUTF("[SUCCESS]");
             }
         } catch (IOException e) { }
+    }
+
+    void downFileResult(String name, Boolean result, String filePath) throws IOException {
+        out = (DataOutputStream) clients.get(name);
+        if (result) {
+            File file = new File(filePath);
+            FileInputStream fis = new FileInputStream(file);
+            out.writeUTF(
+                    "[SEND_FILE]" +
+                    MultiChatServer.STANDARD +
+                    Files.size(file.toPath()) +
+                    MultiChatServer.STANDARD +
+                    file.getName()
+            );
+            byte[] bytes = new byte[1024];
+            int readBit = 0;
+            while((readBit = fis.read(bytes)) != -1) {
+                out.write(bytes, 0, readBit);
+            }
+        } else {
+            out.writeUTF("[DOWN_FAIL]");
+        }
     }
 
     void sendFileUploadSuccess(String name) {

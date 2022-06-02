@@ -74,6 +74,10 @@ class ServerReceiver extends Thread {
                 fileSize = null;
                 break;
             }
+            case "[DOWNLOAD]": {
+                sendFile(commandDiv[1]);
+                break;
+            }
             default: {
                 multiChatServer.sendToAll(commandDiv[0]);
                 break;
@@ -133,9 +137,7 @@ class ServerReceiver extends Thread {
         File[] files = file.listFiles();
         if (files != null) {
             for (File file : files) {
-                System.out.println(file.getName() + "  " + fileName);
                 if (file.getName().equals(fileName)) {
-                    System.out.println("진입");
                     multiChatServer.sendFindDuplicateFileResult(name, true);
                     return;
                 }
@@ -166,6 +168,27 @@ class ServerReceiver extends Thread {
         multiChatServer.sendToAll("#" + name + "님이 들어오셨습니다.");
         multiChatServer.clients.put(name, out);
         System.out.println("현재 서버접속자 수는 " + multiChatServer.clients.size() + "입니다.");
+    }
+
+    /**
+     * Download 명령어에 대응하는 함수로
+     * 파일 리스트에 요청한 파일 이름과 같은 이름의 파일이 있다면
+     * 그 파일을 전송하고
+     * 없다면 실패 메시지를 전송한다.
+     *
+     * @throws IOException
+     */
+    void sendFile(String fileName) throws IOException {
+        File[] files = file.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                if (file.getName().equals(fileName)) {
+                    multiChatServer.downFileResult(name, true, file.getPath());
+                    return;
+                }
+            }
+        }
+        multiChatServer.downFileResult(name, false, null);
     }
 
     /**
