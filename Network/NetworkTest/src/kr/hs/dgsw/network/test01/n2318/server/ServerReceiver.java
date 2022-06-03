@@ -39,7 +39,6 @@ class ServerReceiver extends Thread {
                 sortOutCommand();
             }
         } catch (IOException e) {
-            e.printStackTrace();
         } finally {
             shutDownClient();
             printServerSize();

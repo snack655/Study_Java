@@ -106,6 +106,10 @@ class ClientSender extends Thread {
                 printCommandList();
                 break;
             }
+            case "/exit": {
+                exit();
+                break;
+            }
             default: {
                 out.writeUTF("["+name+"] " + command);
             }
@@ -128,14 +132,22 @@ class ClientSender extends Thread {
             System.out.print("");
         }
         if (MultiChatClient.IS_SUCCESS_FILE_DOWNLOAD) {
-            System.out.println("파일 다운로드가 완료되었습니다.");
+            System.out.println(
+                    MultiChatClient.CLIENT_FOLDER_PATH +
+                    " 경로에 파일 다운로드가 완료되었습니다." +
+                    fileName
+            );
         } else {
             System.out.println("파일 다운로드에 실패했습니다.");
         }
         MultiChatClient.IS_SUCCESS_FILE_DOWNLOAD = null;
     }
 
-
+    /**
+     * 파일 경로만을 받았을 경우 가공 후 sendFileInfo() 함수 호출
+     * @param path
+     * @throws IOException
+     */
     private void makeFile(String path) throws IOException {
         fis = initFile(path);
         if (fis == null)
@@ -199,6 +211,14 @@ class ClientSender extends Thread {
         MultiChatClient.IS_DUPLICATE = null;
     }
 
+    /**
+     * 프로그램을 종료햐는 함수
+     */
+    private void exit() {
+        System.out.println("접속을 종료합니다.");
+        System.exit(0);
+    }
+
 
     /**
      * 명령어 목록을 출력해주는 함수.
@@ -210,6 +230,7 @@ class ClientSender extends Thread {
         System.out.println("/upload 파일경로 : 서버에 지정한 경로의 파일을 업로드 합니다.");
         System.out.println("/upload 파일경로 파일명 : 서버에 지정한 경로의 파일을 지정한 파일명으로 업로드 합니다.");
         System.out.println("/download 파일명 : 서버의 파일 목록에 있는 파일을 다운받습니다.");
+        System.out.println("/exit : 접속을 종료합니다.");
         System.out.println("***********************************");
     }
 
@@ -241,7 +262,6 @@ class ClientSender extends Thread {
         } else {
             out.writeUTF("[CANCEL_SEND_FILE]");
         }
-
     }
     
 } // ClientSender
