@@ -150,11 +150,20 @@ class ServerReceiver extends Thread {
      */
     private void fileReceive() throws IOException {
         fileOut = new FileOutputStream(MultiChatServer.fileFolder + "/" + fileName);
+
+        /*
+        수정
+         */
+        byte[] bytes = new byte[1024];
         int readBit = 0;
-        for (long i = 0; i < fileSize; i++) {
-            readBit = in.read();
-            fileOut.write(readBit);
+        while(true) {
+            readBit = in.read(bytes);
+            // bytes에 저장된 데이터 전송
+            fileOut.write(bytes, 0, readBit);
+            if (readBit != 1024)
+                break;
         }
+
         multiChatServer.sendFileUploadSuccess(name);
     }
 
