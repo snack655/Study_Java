@@ -103,6 +103,7 @@ public class MultiChatServer {
             while((readBit = fis.read(bytes)) != -1) {
                 out.write(bytes, 0, readBit);
             }
+            fis.close();
         } else {
             out.writeUTF("[DOWN_FAIL]");
         }

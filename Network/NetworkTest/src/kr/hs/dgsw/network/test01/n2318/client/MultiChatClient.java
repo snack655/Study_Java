@@ -1,7 +1,5 @@
 package kr.hs.dgsw.network.test01.n2318.client;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
-
 import java.net.ConnectException;
 import java.net.Socket;
 import java.util.Scanner;

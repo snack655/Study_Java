@@ -262,6 +262,7 @@ class ClientSender extends Thread {
         } else {
             out.writeUTF("[CANCEL_SEND_FILE]");
         }
+        fis.close();
     }
     
 } // ClientSender
