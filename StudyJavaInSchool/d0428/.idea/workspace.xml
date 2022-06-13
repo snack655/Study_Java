@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="03e1166f-cb75-4663-bcf9-b7f7e4536f1d" name="Changes" comment="" />
+    <list default="true" id="03e1166f-cb75-4663-bcf9-b7f7e4536f1d" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../../Network/NetworkTest/out/production/NetworkTest/kr/hs/dgsw/network/test01/n2318/server/MultiChatServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/../../Network/NetworkTest/out/production/NetworkTest/kr/hs/dgsw/network/test01/n2318/server/MultiChatServer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Network/NetworkTest/src/kr/hs/dgsw/network/test01/n2318/client/ClientSender.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../Network/NetworkTest/src/kr/hs/dgsw/network/test01/n2318/client/ClientSender.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Network/NetworkTest/src/kr/hs/dgsw/network/test01/n2318/server/MultiChatServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../Network/NetworkTest/src/kr/hs/dgsw/network/test01/n2318/server/MultiChatServer.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -34,6 +38,7 @@
       <option name="presentableId" value="Default" />
       <updated>1651198729767</updated>
       <workItem from="1651198731039" duration="9000" />
+      <workItem from="1655048502808" duration="1000" />
     </task>
     <servers />
   </component>

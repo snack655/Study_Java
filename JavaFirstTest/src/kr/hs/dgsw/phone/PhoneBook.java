@@ -1,17 +1,15 @@
 package kr.hs.dgsw.phone;
 
-import java.util.HashMap;
-import java.util.Map;
+interface PhoneBook {
 
-public class PhoneBook {
-    private final Map<String, Info> infoMap = new HashMap<>();
+    void addMyInfo(String name, String phoneNumber);
 
-    public PhoneBook(String name, String phoneNumber) {
-        Info info = new Info(name, phoneNumber);
-        infoMap.put(name, info);
-    }
+    void searchWithName();
 
-    public static void main(String[] args) {
+    void searchWithPhone();
 
-    }
+    void removeWithName();
+
+    void execute();
+
 }

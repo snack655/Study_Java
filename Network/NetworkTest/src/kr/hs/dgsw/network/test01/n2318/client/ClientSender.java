@@ -190,6 +190,7 @@ class ClientSender extends Thread {
                 fileName
         );
 
+
         while(MultiChatClient.IS_DUPLICATE_WAIT) { }
 
         if (MultiChatClient.IS_DUPLICATE) {

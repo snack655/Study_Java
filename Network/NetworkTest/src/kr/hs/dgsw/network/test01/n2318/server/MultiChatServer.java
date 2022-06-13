@@ -30,7 +30,7 @@ public class MultiChatServer {
             serverSocket = new ServerSocket(3000);
             System.out.println("서버가 시작되었습니다!");
 
-            while(true) {
+            while (true) {
                 socket = serverSocket.accept();
                 System.out.println("[" + socket.getInetAddress()
                             + ":"+socket.getPort()+"]"+"에서 접속하였습니다.");
@@ -41,6 +41,7 @@ public class MultiChatServer {
             e.printStackTrace();
         }
     }
+
     void sendToAll(String msg) {
         Iterator it = clients.keySet().iterator();
 
