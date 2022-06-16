@@ -6,9 +6,9 @@ interface BasePhoneBook {
 
     void addMyInfo() throws IOException;
 
-    void searchWithName();
+    void searchWithName() throws IOException;
 
-    void searchWithPhone();
+    void searchWithPhone() throws IOException;
 
     void removeWithName();
 

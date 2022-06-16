@@ -1,13 +1,14 @@
 package kr.hs.dgsw.phone;
 
 import java.io.*;
-import java.util.InputMismatchException;
-import java.util.Scanner;
+import java.util.*;
 
 public class PhoneBook implements BasePhoneBook {
     private final Scanner scanner;
     private final File file;
     private final PrintWriter pw;
+    public static final String DIVISION = "::";
+    private BufferedReader br;
 
     PhoneBook() throws IOException {
         scanner = new Scanner(System.in);
@@ -27,18 +28,57 @@ public class PhoneBook implements BasePhoneBook {
         String phoneNumber = scanner.next();
 
         System.out.println(name + " " + phoneNumber);
-        pw.println(name + "::" + phoneNumber);
-        System.out.println("저장되었습니다.");
+        pw.println(name + DIVISION + phoneNumber);
+        System.out.println("저장되었습니다.\n");
     }
 
     @Override
-    public void searchWithName() {
-
+    public void searchWithName() throws IOException {
+        System.out.print("검색하실 이름을 입력해주세요 : ");
+        String name = scanner.next().toLowerCase(Locale.ROOT);
+        findInformation(name, 0);
     }
 
     @Override
-    public void searchWithPhone() {
+    public void searchWithPhone() throws IOException {
+        System.out.print("검색하실 전화번호를 입력해주세요 : ");
+        String phone = scanner.next();
+        findInformation(phone, 1);
+    }
 
+    /**
+     * 정보를 입력받아 파일에서 같은 정보를 호함하고 있는 라인 찾기
+     */
+    private void findInformation(String hint, int type) throws IOException {
+        br = new BufferedReader(new FileReader(file));
+
+        // 전화번호 - 이름
+        Map<String, String> info = new HashMap<>();
+
+        boolean isContain = false;
+        String line;
+
+        while ((line = br.readLine()) != null) {
+            String[] elements = line.split(DIVISION);
+            if (elements[type].toLowerCase(Locale.ROOT).contains(hint)) {
+                info.put(elements[1], elements[0]);
+                isContain = true;
+            }
+        }
+        if (!isContain) {
+            System.out.println("검색하신 정보가 존재하지 않습니다..\n");
+            return;
+        }
+        printSortedMapByValue(info);
+        System.out.println();
+    }
+
+    private void printSortedMapByValue(Map info) {
+        List<Map.Entry<String, String>> entryList = new LinkedList<>(info.entrySet());
+        entryList.sort(Map.Entry.comparingByValue());
+
+        for(Map.Entry<String, String> entry: entryList)
+            System.out.println("이름 : " + entry.getValue() + "     전화번호 : "+entry.getKey());
     }
 
     @Override
@@ -68,11 +108,11 @@ public class PhoneBook implements BasePhoneBook {
                     break;
                 }
                 case 2: {
-                    System.out.println("이름으로 전화번호 검색하기");
+                    searchWithName();
                     break;
                 }
                 case 3: {
-                    System.out.println("전화번호의 일부로 전화번호 검색하기");
+                    searchWithPhone();
                     break;
                 }
                 case 4: {
