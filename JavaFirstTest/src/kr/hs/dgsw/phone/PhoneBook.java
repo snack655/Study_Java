@@ -7,12 +7,14 @@ public class PhoneBook implements BasePhoneBook {
     private final Scanner scanner;
     private final File file;
     private final PrintWriter pw;
+    private Map<String, String> info;
     public static final String DIVISION = "::";
+    private final String filePath = "/Users/choiminjae/Study/Sample/PhoneBook";
     private BufferedReader br;
 
     PhoneBook() throws IOException {
         scanner = new Scanner(System.in);
-        file = new File("/Users/choiminjae/Study/Sample/PhoneBook");
+        file = new File(filePath);
         pw = new PrintWriter(new FileWriter(file, true), true);
     }
 
@@ -50,10 +52,10 @@ public class PhoneBook implements BasePhoneBook {
      * 정보를 입력받아 파일에서 같은 정보를 호함하고 있는 라인 찾기
      */
     private void findInformation(String hint, int type) throws IOException {
-        br = new BufferedReader(new FileReader(file));
+        br = initBufferedReader();
 
         // 전화번호 - 이름
-        Map<String, String> info = new HashMap<>();
+        info = new HashMap<>();
 
         boolean isContain = false;
         String line;
@@ -71,19 +73,91 @@ public class PhoneBook implements BasePhoneBook {
         }
         printSortedMapByValue(info);
         System.out.println();
+        br.close();
     }
 
     private void printSortedMapByValue(Map info) {
         List<Map.Entry<String, String>> entryList = new LinkedList<>(info.entrySet());
-        entryList.sort(Map.Entry.comparingByValue());
-
+        entryList.sort(Map.Entry.comparingByValue()); 
         for(Map.Entry<String, String> entry: entryList)
             System.out.println("이름 : " + entry.getValue() + "     전화번호 : "+entry.getKey());
     }
 
     @Override
-    public void removeWithName() {
+    public void removeWithName() throws IOException {
+        br = initBufferedReader();
+        List<String> removeInfoList = new ArrayList<>();
+        List<String> infoList = new ArrayList<>();
 
+        System.out.print("삭제할 정보의 이름을 입력해주세요 : ");
+        String name = scanner.next();
+        String line;
+        // 파일을 읽으며 정보를 리스트 형태로 저장한다.
+        while ((line = br.readLine()) != null) {
+            String[] elements = splitInfo(line);
+            if (Objects.equals(elements[0], name))
+                removeInfoList.add(line);
+            infoList.add(line);
+        }
+
+        long lineSize = removeInfoList.size();
+        if (lineSize == 0) {
+            // 같은 이름의 정보가 없는 경우
+            System.out.println("해당하는 이름을 찾을 수 없습니다.");
+        } else if (lineSize == 1) {
+            // 같은 이름의 정보가 하나 있는 경우
+            String[] elements = splitInfo(removeInfoList.get(0));
+            reWriteFile(elements[1], infoList);
+        } else {
+            // 같은 이름의 정보가 2개 이상있는 경우
+            for (int i = 0; i < lineSize; i++) {
+                String[] elements = splitInfo(removeInfoList.get(i));
+                System.out.println("[이름 : " + elements[0] + " 전화번호 : " + elements[1] + "]");
+            }
+            System.out.println("무슨 정보를 삭제하시겠습니까?");
+            System.out.print("전화번호를 입력해주세요 : ");
+            String phone = scanner.next();
+            reWriteFile(phone, infoList);
+        }
+        br.close();
+    }
+
+    private void reWriteFile(String phone, List<String> infoList) throws IOException {
+        PrintWriter newPw = new PrintWriter(new FileWriter(file), true);
+        boolean isRemove = false;
+        for (String info: infoList) {
+            String[] elements = splitInfo(info);
+            if (!Objects.equals(elements[1], phone))
+                newPw.println(info);
+            else {
+                System.out.println("[이름 : " + elements[0] + " 전화번호 : " + elements[1] + "] 을 삭제합니다.");
+                isRemove = true;
+            }
+        }
+        if (!isRemove)
+            System.out.println("해당하는 정보가 없습니다.");
+    }
+
+    private BufferedReader initBufferedReader() throws FileNotFoundException {
+        return new BufferedReader(new FileReader(file));
+    }
+
+
+    @Override
+    public void printInfo() throws IOException {
+        br = initBufferedReader();
+        String line;
+        info = new HashMap<>();
+        while((line = br.readLine()) != null) {
+            String[] elements = splitInfo(line);
+            info.put(elements[1], elements[0]);
+        }
+        printSortedMapByValue(info);
+        br.close();
+    }
+
+    private String[] splitInfo(String info) {
+        return info.split(DIVISION);
     }
 
     @Override
@@ -116,11 +190,15 @@ public class PhoneBook implements BasePhoneBook {
                     break;
                 }
                 case 4: {
-                    System.out.println("이름으로 전화번호 삭제하기");
+                    removeWithName();
                     break;
                 }
                 case 5: {
                     showCommand();
+                    break;
+                }
+                case 6: {
+                    printInfo();
                     break;
                 }
                 default: {
@@ -140,6 +218,7 @@ public class PhoneBook implements BasePhoneBook {
                 "(3) - 전화번호의 일부로 전화번호 검색하기\n" +
                 "(4) - 이름으로 전화번호 삭제하기\n" +
                 "(5) - 명령어 종류보기\n" +
+                "(6) - 전화번호부 정보 출력하기\n" +
                 "(-1) - 프로그램 종료");
     }
 
@@ -152,12 +231,3 @@ public class PhoneBook implements BasePhoneBook {
         }
     }
 }
-
-/**
- * 이름과 전화번호 등록하기 (등록된 데이터는 파일에 저장 - 데이터베이스 사용 금지)
- * 이름으로 전화번호 검색하기 - 이름의 일부분으로 검색 가능해야 하며, 결과가 여러 개일 경우에 모두 보여 줍니다.
- * 전화번호의 일부로 전화번호 검색하기 - 결고가 여러 개일 경우에 모두 보여 줍니다.
- * 이름으로 전화번호 삭제하기 - 이름이 중복되었을 경우, 전화번호를 모두 제시한 뒤 특정한 전화번호를 삭제하게 합니다.
- * 전화번호 수정 기능을 구현하지 않아도 됩니다.
- * 결과가 여러 개일 경우에 이름 순으로 정렬되어 출력되어야 합니다.
- */

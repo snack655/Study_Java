@@ -10,8 +10,10 @@ interface BasePhoneBook {
 
     void searchWithPhone() throws IOException;
 
-    void removeWithName();
+    void removeWithName() throws IOException;
 
     void execute() throws IOException;
+
+    void printInfo() throws IOException;
 
 }
