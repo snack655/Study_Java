@@ -17,13 +17,13 @@ public class Search extends BaseFeatures {
     public void searchWithName() throws IOException {
         System.out.print("검색하실 이름을 입력해주세요 : ");
         String name = scanner.next().toLowerCase(Locale.ROOT);
-        findInformation(name, 0);
+        findInformation(name, Type.NAME.getValue());
     }
 
     public void searchWithPhone() throws IOException {
         System.out.print("검색하실 전화번호를 입력해주세요 : ");
         String phone = scanner.next();
-        findInformation(phone, 1);
+        findInformation(phone, Type.PHONE.getValue());
     }
 
     /**

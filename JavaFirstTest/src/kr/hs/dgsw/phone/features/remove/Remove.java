@@ -4,7 +4,6 @@ import kr.hs.dgsw.phone.base.BaseFeatures;
 import kr.hs.dgsw.phone.model.Info;
 import kr.hs.dgsw.phone.utils.Constants;
 import kr.hs.dgsw.phone.utils.PrintUtil;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
