@@ -5,7 +5,6 @@ import java.io.*;
 import java.util.*;
 
 public class Execute extends BaseExecute {
-    private BufferedReader br;
 
     Execute() throws IOException {
         super();

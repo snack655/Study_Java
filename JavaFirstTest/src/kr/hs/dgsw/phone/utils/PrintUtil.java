@@ -15,7 +15,7 @@ public class PrintUtil {
                 "(-1) - 프로그램 종료");
     }
 
-    public void printSortedMapByValue(Map info) {
+    public void printSortedMapByValue(Map<String, String> info) {
         List<Map.Entry<String, String>> entryList = new LinkedList<>(info.entrySet());
         entryList.sort(Map.Entry.comparingByValue());
         for(Map.Entry<String, String> entry: entryList)

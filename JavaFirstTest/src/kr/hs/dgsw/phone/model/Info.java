@@ -1,26 +1,19 @@
 package kr.hs.dgsw.phone.model;
 
 import kr.hs.dgsw.phone.utils.Constants;
-import kr.hs.dgsw.phone.utils.InfoUtil;
 import kr.hs.dgsw.phone.utils.PrintUtil;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class Info {
-    private Map<String, String> info;
     private final Scanner scanner;
-    private PrintWriter pw;
     private final File file;
-    private final InfoUtil infoUtil;
     private final PrintUtil printUtil;
 
-    public Info(Scanner scanner, PrintUtil printUtil) throws IOException {
+    public Info(Scanner scanner, PrintUtil printUtil) {
         this.scanner = scanner;
         this.printUtil = printUtil;
-        infoUtil = new InfoUtil();
         file = new File(Constants.filePath);
     }
 
@@ -41,22 +34,32 @@ public class Info {
 
     /**
      * 파일에 작성
-     * @param name
-     * @param phone
-     * @param isAppend
-     * @throws IOException
+     * @param name 이름
+     * @param phone 전화번호
+     * @param isAppend 파일을 이어서 쓸건지 확인
      */
     public void writeFile(String name, String phone, boolean isAppend) throws IOException {
-        pw = new PrintWriter(new FileWriter(file, isAppend), true);
+        PrintWriter pw = new PrintWriter(new FileWriter(file, isAppend), true);
         pw.println(name + Constants.DIVISION + phone);
+        pw.close();
+    }
+
+    public List<String> readFile() throws IOException {
+        List<String> infoList = new ArrayList<>();
+        BufferedReader br = initBufferedReader();
+        String line;
+        while ((line = br.readLine()) != null) {
+            infoList.add(line);
+        }
+        return infoList;
     }
 
     public void printInfo() throws IOException {
         BufferedReader br = initBufferedReader();
         String line;
-        info = new HashMap<>();
+        Map<String, String> info = new HashMap<>();
         while((line = br.readLine()) != null) {
-            String[] elements = infoUtil.splitInfo(line);
+            String[] elements = line.split(Constants.DIVISION);
             info.put(elements[1], elements[0]);
         }
         printUtil.printSortedMapByValue(info);

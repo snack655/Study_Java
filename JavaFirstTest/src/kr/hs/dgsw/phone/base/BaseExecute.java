@@ -15,12 +15,12 @@ public abstract class BaseExecute {
     protected Search search;
     protected Remove remove;
 
-    public BaseExecute() throws IOException {
+    public BaseExecute() {
         printUtil = new PrintUtil();
         scanner = new Scanner(System.in);
         info = new Info(scanner, printUtil);
-        search = new Search(scanner, printUtil);
-        remove = new Remove(scanner);
+        search = new Search(scanner, printUtil, info);
+        remove = new Remove(scanner, printUtil, info);
     }
 
     abstract public void execute() throws IOException;
