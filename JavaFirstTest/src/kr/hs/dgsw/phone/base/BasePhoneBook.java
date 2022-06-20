@@ -1,8 +1,8 @@
-package kr.hs.dgsw.phone;
+package kr.hs.dgsw.phone.base;
 
 import java.io.IOException;
 
-interface BasePhoneBook {
+public interface BasePhoneBook {
 
     void addMyInfo() throws IOException;
 
@@ -11,8 +11,6 @@ interface BasePhoneBook {
     void searchWithPhone() throws IOException;
 
     void removeWithName() throws IOException;
-
-    void execute() throws IOException;
 
     void printInfo() throws IOException;
 
