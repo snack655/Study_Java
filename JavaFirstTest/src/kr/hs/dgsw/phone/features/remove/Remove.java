@@ -53,10 +53,11 @@ public class Remove extends BaseFeatures {
 
     private void reWriteFile(String phone, List<String> infoList) throws IOException {
         boolean isRemove = false;
+        info.initFile();
         for (String s: infoList) {
             String[] elements = s.split(Constants.DIVISION);
             if (!Objects.equals(elements[1], phone))
-                info.writeFile(elements[0], elements[1], false);
+                info.writeFile(elements[0], elements[1]);
             else {
                 System.out.println("[이름 : " + elements[0] + " 전화번호 : " + elements[1] + "] 을 삭제합니다.");
                 isRemove = true;

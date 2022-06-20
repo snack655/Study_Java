@@ -19,6 +19,7 @@ public class Execute extends BaseExecute {
                 command = scanner.nextInt();
             } catch (InputMismatchException e) {
                 System.out.println("명령어 형식이 잘못되었습니다.");
+                System.out.println("프로그램을 종료합니다.");
                 break;
             }
             if (command == -1) {
@@ -27,7 +28,7 @@ public class Execute extends BaseExecute {
             }
             switch (command) {
                 case 1: {
-                    info.addMyInfo(true);
+                    info.addMyInfo();
                     break;
                 }
                 case 2: {

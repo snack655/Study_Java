@@ -21,25 +21,31 @@ public class Info {
      * 전화번호부에 정보 등록
      * 등록 형식 : 이름::전화번호\n
      */
-    public void addMyInfo(boolean isAppend) throws IOException {
+    public void addMyInfo() throws IOException {
         System.out.print("이름 : ");
         String name = scanner.next();
         System.out.print("전화번호 : ");
         String phoneNumber = scanner.next();
 
         System.out.println(name + " " + phoneNumber);
-        writeFile(name, phoneNumber, isAppend);
+        writeFile(name, phoneNumber);
         System.out.println("저장되었습니다.\n");
+    }
+
+
+    public void initFile() throws IOException {
+        PrintWriter pw = new PrintWriter(new FileWriter(file, false), true);
+        pw.print("");
+        pw.close();
     }
 
     /**
      * 파일에 작성
      * @param name 이름
      * @param phone 전화번호
-     * @param isAppend 파일을 이어서 쓸건지 확인
      */
-    public void writeFile(String name, String phone, boolean isAppend) throws IOException {
-        PrintWriter pw = new PrintWriter(new FileWriter(file, isAppend), true);
+    public void writeFile(String name, String phone) throws IOException {
+        PrintWriter pw = new PrintWriter(new FileWriter(file, true), true);
         pw.println(name + Constants.DIVISION + phone);
         pw.close();
     }
