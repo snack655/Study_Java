@@ -84,12 +84,9 @@ class ClientReceiver extends Thread {
         FileOutputStream fos = new FileOutputStream(MultiChatClient.CLIENT_FOLDER_PATH + "/" + fileName);
         byte[] bytes = new byte[1024];
         int readBit = 0;
-        while(true) {
-            readBit = in.read(bytes);
+        while((readBit = in.read(bytes)) != -1) {
             // bytes에 저장된 데이터 전송
             fos.write(bytes, 0, readBit);
-            if (readBit != 1024)
-                break;
         }
         fos.close();
         MultiChatClient.IS_SUCCESS_FILE_DOWNLOAD = true;
