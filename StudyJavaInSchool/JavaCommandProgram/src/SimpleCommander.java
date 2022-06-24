@@ -9,7 +9,7 @@ public class SimpleCommander {
 	
 	public SimpleCommander() {
 		this.scanner = new Scanner(System.in);
-		this.currentDirectory = new File("C:/");
+		this.currentDirectory = new File("/Users/choiminjae/");
 	}
 
 	public void execute() {
