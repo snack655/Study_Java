@@ -153,14 +153,13 @@ class ServerReceiver extends Thread {
 
         byte[] bytes = new byte[1024];
         int readBit = 0;
-        while(true) {
-            readBit = in.read(bytes);
+        while((readBit = in.read(bytes)) != -1) {
+            fileSize -= readBit;
+            if (fileSize == 0)
+                break;
             // bytes에 저장된 데이터 전송
             fileOut.write(bytes, 0, readBit);
-            if (readBit != 1024)
-                break;
         }
-        fileOut.close();
         multiChatServer.sendFileUploadSuccess(name);
     }
 
