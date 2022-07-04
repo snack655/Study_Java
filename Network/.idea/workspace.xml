@@ -1,7 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="fe7db47b-f412-4658-95ef-91b4c0351f98" name="Changes" comment="" />
+    <list default="true" id="fe7db47b-f412-4658-95ef-91b4c0351f98" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../TestProject/src/kr/hs/dgsw/finaltest/bakery/BakeryMain.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../TestProject/src/kr/hs/dgsw/finaltest/bakery/Thread_Bakery.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../TestProject/src/kr/hs/dgsw/finaltest/cake/CakeEater.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../TestProject/src/kr/hs/dgsw/finaltest/cake/CakeEatings.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../TestProject/src/kr/hs/dgsw/finaltest/cake/CakeMaker.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../TestProject/src/kr/hs/dgsw/finaltest/cake/CakePlate.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../TestProject/src/kr/hs/dgsw/finaltest/philosopher/DiningPhilosopherMain.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../TestProject/src/kr/hs/dgsw/finaltest/philosopher/ThreadDiningPhilosopher.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../TestProject/src/kr/hs/dgsw/finaltest/sema/Thread_SemaphoreMain.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../TestProject/src/kr/hs/dgsw/finaltest/sema/Thread_WithSemaphore.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../TestProject/src/kr/hs/dgsw/finaltest/sync/with/MyRun_WithSynchronized.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../TestProject/src/kr/hs/dgsw/finaltest/sync/with/WhitSynchronizedMain.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../TestProject/src/kr/hs/dgsw/finaltest/sync/without/MyRun_WithOutSynchronized.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../TestProject/src/kr/hs/dgsw/finaltest/sync/without/WithOutSynchronizedMain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TestProject/src/kr/hs/dgsw/udp/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/../TestProject/src/kr/hs/dgsw/udp/Client.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -12,6 +29,9 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="28ahQWh6C3BRdzkjIcNcJKhDzgO" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -34,6 +54,8 @@
       <option name="presentableId" value="Default" />
       <updated>1651460587803</updated>
       <workItem from="1651460588846" duration="28000" />
+      <workItem from="1656932424652" duration="47000" />
+      <workItem from="1656932499108" duration="710000" />
     </task>
     <servers />
   </component>
